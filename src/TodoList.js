@@ -31,7 +31,7 @@ const TodoList = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title: newTask, desc: '' }),
+        body: JSON.stringify({ title: newTask}),
       });
       if (response.ok) {
         fetchTasks();

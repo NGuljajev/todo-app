@@ -6,35 +6,9 @@ import TodoList from './TodoList';
 function App() {
   const [token, setToken] = useState(localStorage.getItem('access_token'));
   const [showRegister, setShowRegister] = useState(false);
-  const [formData, setFormData] = useState({
-    username: '',
-    firstname: '',
-    lastname: '',
-    password: '',
-  });
 
-  const handleLogin = async (username, password) => {
-    try {
-      const response = await fetch('/users/get-token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error('Login error:', data);
-        throw new Error(data.message || `Login failed (status: ${response.status})`);
-      }
-
-      setToken(data.accessToken);
-      localStorage.setItem('access_token', data.accessToken);
-    } catch (error) {
-      console.error('Login error details:', error);
-    }
+  const handleLogin = (accessToken) => {
+    setToken(accessToken);
   };
 
   const handleLogout = () => {
@@ -46,52 +20,37 @@ function App() {
     setShowRegister(!showRegister);
   };
 
-  const validateForm = () => {
-    // Add form validation logic here
-    return true;
+  const defaultUser = {
+    username: "email@example.com",
+    firstname: "FirstName",
+    lastname: "LastName",
+    password: "password123"
   };
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-
-    if (!validateForm()) return;
-
+  const sendData = async (formData) => {
     try {
-      const apiUrl = 'https://demo2.z-bit.ee/users';
-
-      const requestBody = {
-        username: formData.username,
-        firstname: formData.firstname,
-        lastname: formData.lastname,
-        password: formData.password,
-      };
-
-      console.log('Sending data:', requestBody);
-
-      const response = await fetch(apiUrl, {
+      const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Access-Control-Allow-Origin': 'http://localhost:3000',
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          username: formData.username,
+          firstname: formData.firstname,
+          lastname: formData.lastname,
+          password: formData.password,
+        }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        console.error('Server validation error:', data);
-        throw new Error(data.message || `Registreerimine ebaõnnestus (status: ${response.status})`);
+        const errorData = await response.json();
+        console.error('Server validation error:', errorData);
+        throw new Error(errorData.message || `Registreerimine ebaõnnestus (status: ${response.status})`);
       }
 
-      setTimeout(() => {
-        switchForm();
-      }, 2000);
+      console.log('Registration successful');
     } catch (error) {
-      console.error('Registration error details:', error);
+      console.error('Error during registration:', error);
     }
   };
 
@@ -106,7 +65,7 @@ function App() {
       ) : (
         <>
           {showRegister ? (
-            <Register onRegister={handleRegister} />
+            <Register onRegister={switchForm} />
           ) : (
             <Login onLogin={handleLogin} />
           )}

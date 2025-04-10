@@ -6,7 +6,6 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     console.log(password)
     const response = await fetch('https://demo2.z-bit.ee/users/get-token', {
       method: 'POST',
