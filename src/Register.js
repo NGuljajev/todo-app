@@ -5,7 +5,7 @@ const Register = ({ onRegister }) => {
     username: '',
     firstname: '',
     lastname: '',
-    password: ''
+    newPassword: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -53,7 +53,7 @@ const Register = ({ onRegister }) => {
           username: formData.username,
           firstname: formData.firstname,
           lastname: formData.lastname,
-          password: formData.password
+          newPassword: formData.password
         }),
       });
 

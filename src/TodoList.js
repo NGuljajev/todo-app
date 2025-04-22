@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
+const API_URL = "https://demo2.z-bit.ee"
+
 const TodoList = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
@@ -7,7 +9,7 @@ const TodoList = () => {
 
   const fetchTasks = useCallback(async () => {
     try {
-      const response = await fetch('http://demo2.z-bit.ee/tasks', {
+      const response = await fetch(API_URL+'/tasks', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -25,7 +27,7 @@ const TodoList = () => {
 
   const addTask = async () => {
     try {
-      const response = await fetch('http://demo2.z-bit.ee/tasks', {
+      const response = await fetch(API_URL+'/tasks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +46,7 @@ const TodoList = () => {
 
   const deleteTask = async (id) => {
     try {
-      await fetch(`http://demo2.z-bit.ee/tasks/${id}`, {
+      await fetch(API_URL+`/tasks/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,7 +60,7 @@ const TodoList = () => {
 
   const toggleTask = async (id, marked_as_done) => {
     try {
-      await fetch(`http://demo2.z-bit.ee/tasks/${id}`, {
+      await fetch(API_URL+`/tasks/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
